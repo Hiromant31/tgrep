@@ -2,25 +2,19 @@
   "name": "tgrep",
   "version": "1.0.0",
   "main": "index.js",
+  "type": "commonjs",
   "dependencies": {
     "express": "^4.22.1",
-    "http-proxy-middleware": "^2.0.6",
     "socket.io": "^4.8.3"
   },
   "scripts": {
-    "start": "node index.js"
+    "start": "node index.js",
+    "build": "cd client && npm install && npm run build"
   },
-  "description": "",
   "repository": {
     "type": "git",
     "url": "git+https://github.com/Hiromant31/tgrep.git"
   },
-  "keywords": [],
   "author": "",
-  "license": "ISC",
-  "type": "commonjs",
-  "bugs": {
-    "url": "https://github.com/Hiromant31/tgrep/issues"
-  },
-  "homepage": "https://github.com/Hiromant31/tgrep#readme"
+  "license": "ISC"
 }

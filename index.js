@@ -1,17 +1,30 @@
 const express = require('express');
-const { createProxyMiddleware } = require('http-proxy-middleware');
+const http = require('http');
+const { Server } = require('socket.io');
+const path = require('path');
 
 const app = express();
+const server = http.createServer(app);
+const io = new Server(server);
 
-app.get('/', (req, res) => res.send('TG Proxy is active!'));
+// Раздаем статические файлы (наш фронтенд)
+app.use(express.static('public'));
 
-app.use('/', createProxyMiddleware({
-    target: 'https://api.telegram.org',
-    changeOrigin: true,
-    onProxyRes: (proxyRes) => {
-        proxyRes.headers['Access-Control-Allow-Origin'] = '*';
-    }
-}));
+io.on('connection', (socket) => {
+    console.log('Пользователь подключился');
+
+    // Слушаем входящие сообщения
+    socket.on('chat message', (msg) => {
+        // Рассылаем сообщение всем подключенным пользователям
+        io.emit('chat message', msg);
+    });
+
+    socket.on('disconnect', () => {
+        console.log('Пользователь отключился');
+    });
+});
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Proxy port: ${PORT}`));
+server.listen(PORT, () => {
+    console.log(`Мессенджер запущен на порту ${PORT}`);
+});
